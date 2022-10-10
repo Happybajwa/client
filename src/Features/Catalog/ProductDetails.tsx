@@ -7,7 +7,7 @@ import NotFound from "../../App/Errors/NotFound";
 import LoadingComponent from "../../App/Layout/LoadingComponent";
 import { Product } from "../../App/Models/Product";
 import { useAppDispatch, useAppSelector } from "../../App/Store/ConfigureStore";
-import { addBasketItemAsync, setBasket } from "../Basket/BasketSlice";
+import { addBasketItemAsync } from "../Basket/BasketSlice";
 
 
 
@@ -81,8 +81,8 @@ export default function ProductDetails() {
                             size='large'
                             variant="contained"
                             fullWidth 
-                            loading={status.includes('pendingAddItem'+product.id)}
-                            onClick={() => dispatch(addBasketItemAsync({productId:product.id}))} >Add to Cart</LoadingButton>
+                            loading={status.includes('pendingAddItem' + product.id)}
+                            onClick={() => dispatch(addBasketItemAsync({productId:product.id, quantity:1}))} >Add to Cart</LoadingButton>
                     </Grid>
                 </Grid>
             </Grid>

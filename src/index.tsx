@@ -9,8 +9,6 @@ import { Store } from './App/Store/ConfigureStore';
 
 export const history = createBrowserHistory();
 
-
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
