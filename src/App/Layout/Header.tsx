@@ -2,7 +2,7 @@ import { ShoppingCart } from "@mui/icons-material";
 import { AppBar, Badge, Box, colors, IconButton, List, ListItem, makeStyles, Switch, Toolbar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import { useStoreContext } from "../Context/StoreContext";
+import { useAppSelector } from "../Store/ConfigureStore";
 
 
 
@@ -34,7 +34,7 @@ const navStyle = {
 
 export default function Header({ darkMode, handleThemeChange }: Props) {
 
-    const {basket} = useStoreContext();
+    const {basket} = useAppSelector(state => state.basket);
     
     const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
