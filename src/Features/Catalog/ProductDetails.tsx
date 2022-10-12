@@ -1,33 +1,29 @@
 import { LoadingButton } from "@mui/lab";
 import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { Link, useParams } from "react-router-dom";
-import Agent from "../../App/Api/Agent";
 import NotFound from "../../App/Errors/NotFound";
 import LoadingComponent from "../../App/Layout/LoadingComponent";
-import { Product } from "../../App/Models/Product";
 import { useAppDispatch, useAppSelector } from "../../App/Store/ConfigureStore";
 import { addBasketItemAsync } from "../Basket/BasketSlice";
+import { fetchProductAsync, productSelectors } from "./CatalogSlice";
 
 
 
 
 export default function ProductDetails() {
 
-    const { id } = useParams<{ id: string}>();
-    const {basket, status} = useAppSelector(state => state.basket);
+    const {status} = useAppSelector(state => state.basket);
+    const {status:productStatus} = useAppSelector(state => state.catalog)
     const dispatch = useAppDispatch();
-    const [product, setProduct] = useState<Product | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { id } = useParams<{id: string}>();
+    const product = useAppSelector(state => productSelectors.selectById(state, Number(id)));
 
     useEffect(() => {
-       Agent.Catalog.details(Number(id))
-       .then(response => setProduct(response))
-       .catch(error => console.log(error))
-       .finally(() => setLoading(false))
-    }, [id])
+      if(!product) dispatch(fetchProductAsync(Number(id)))
+    }, [id, dispatch, product])
 
-    if (loading) return <LoadingComponent message='Loading Product'/>
+    if (productStatus.includes('pending')) return <LoadingComponent message='Loading Product'/>
     if (!product) return <NotFound/>
 
     return (

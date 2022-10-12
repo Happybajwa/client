@@ -1,4 +1,4 @@
-import { ShoppingCart } from "@mui/icons-material";
+import { Margin, ShoppingCart } from "@mui/icons-material";
 import { AppBar, Badge, Box, colors, IconButton, List, ListItem, makeStyles, Switch, Toolbar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -39,11 +39,11 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
     const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
     return (
-        <AppBar position="static">
+        <AppBar position="fixed">
             <Toolbar sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
             }}>
                 <Box
                     component="img"
