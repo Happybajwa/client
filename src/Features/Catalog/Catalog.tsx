@@ -1,5 +1,4 @@
-import { Checkbox, FormControl, FormControlLabel, FormGroup, Grid, Pagination, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Grid, Paper } from "@mui/material";
 import { useEffect } from "react";
 import AppPagination from "../../App/Components/AppPagination";
 import CheckBoxButton from "../../App/Components/CheckBoxButtons";
@@ -19,7 +18,7 @@ const sortOptions = [
 export default function Catalog() {
 
   const products = useAppSelector(productSelectors.selectAll);
-  const { productsLoaded, status, filtersLoaded, gender, size, ProductParams, pageData } = useAppSelector(state => state.catalog)
+  const { productsLoaded, filtersLoaded, gender, size, ProductParams, pageData } = useAppSelector(state => state.catalog)
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -30,7 +29,7 @@ export default function Catalog() {
     if (!filtersLoaded) dispatch(fetchFilterAsync());
   }, [dispatch, filtersLoaded]);
 
-  if (status.includes('pending') || !pageData) return <LoadingComponent message="Loading Products" />
+  if (!filtersLoaded) return <LoadingComponent message="Loading Products" />
   return (
     <Grid container display='flex' justifyContent='space-between' spacing={4} sx={{ mt: 1 }}>
       <Grid item xs={3} >
@@ -64,10 +63,11 @@ export default function Catalog() {
       </Grid>
       <Grid item xs={3} />
       <Grid item xs={9} sx={{ mb: 1 }}>
-        <AppPagination
-          pageData={pageData}
-          onPageChange={(page: number) => dispatch(setPageNumber({ pageNumber: page }))}
-        />
+        {pageData &&
+          <AppPagination
+            pageData={pageData}
+            onPageChange={(page: number) => dispatch(setPageNumber({ pageNumber: page }))}
+          />}
       </Grid>
     </Grid>
   );

@@ -1,18 +1,24 @@
 import { Avatar, Grid, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import { Product } from "../../App/Models/Product";
+import { useAppSelector } from "../../App/Store/ConfigureStore";
 import ProductsCard from "./ProductCard";
+import ProductCardSkeleton from "./ProductCardSkeleton";
 
 interface Props {
     products: Product[];
 }
 
 export default function ProductList({ products }: Props) {
+    const { productsLoaded } = useAppSelector(state => state.catalog);
     return (
         <Grid container spacing={4}>
             {products.map((product) => {
                 return (
                     <Grid item xs={4} key={product.id}>
-                        <ProductsCard product={product}></ProductsCard>
+                        {!productsLoaded ? (<ProductCardSkeleton />) : (
+                            <ProductsCard product={product}></ProductsCard>
+                        )}
+
                     </Grid>
                 );
             })}
