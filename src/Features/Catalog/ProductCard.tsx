@@ -15,9 +15,8 @@ export default function ProductsCard({ product }: Props) {
     const { status } = useAppSelector(state => state.basket)
     const dispatch = useAppDispatch();
 
-
     return (
-        <Card sx={{ marginTop: 9, marginBottom: -12 }}>
+        <Card>
             <CardHeader color='#00b1d2'
                 avatar={
                     <Avatar sx={{ bgcolor: "secondary.main" }}>
@@ -35,6 +34,7 @@ export default function ProductsCard({ product }: Props) {
                 image={product.pictureUrl}
                 title={product.name}
                 alt="Photo"
+                sx={{p:2}}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" color='primary.main'>

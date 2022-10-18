@@ -39,7 +39,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
     const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
     return (
-        <AppBar position="fixed">
+        <AppBar position="static">
             <Toolbar sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -54,7 +54,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                     alt="cool-Collection logo"
                     src="../cool.png"
                 ></Box>
-                <Box>
+                <Box sx={{ml:8}}>
                     <Typography variant="h6" component={NavLink}
                         to='/home'
                         end
