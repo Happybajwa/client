@@ -1,5 +1,4 @@
 import { Typography } from "@mui/material";
-import { typography } from "@mui/system";
 
 export default function CheckoutPage() {
     return(

@@ -5,8 +5,6 @@ import { useLocation } from "react-router-dom";
 
 
 export default function ServerError() {
-
-    const history = useNavigate();
     const { state } = useLocation();
 
     return (

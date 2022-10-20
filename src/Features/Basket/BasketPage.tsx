@@ -12,10 +12,10 @@ import BasketSummary from "./BasketSummary";
 export default function BasketPage() {
 
   const { basket, status } = useAppSelector(state => state.basket);
+  
   const dispatch = useAppDispatch();
 
-  if (!basket) return <Typography variant="h3" textAlign="center" marginTop={3}>Your Basket is Empty</Typography>
-
+  if(!basket) return <Typography variant="h3" textAlign="center" marginTop={3}>Your Basket is Empty</Typography>
   return (
     <>
       <TableContainer component={Paper} sx={{ marginTop: 3 }}>
@@ -29,7 +29,7 @@ export default function BasketPage() {
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody>      
             {basket.items.map((item) => (
               <TableRow
                 key={item.productId}

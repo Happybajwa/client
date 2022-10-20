@@ -1,5 +1,6 @@
 import { Margin, ShoppingCart } from "@mui/icons-material";
 import { AppBar, Badge, Box, colors, IconButton, List, ListItem, makeStyles, Switch, Toolbar, Typography } from "@mui/material";
+import { Container } from "@mui/system";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../Store/ConfigureStore";
@@ -40,6 +41,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
 
     return (
         <AppBar position="static">
+            <Container maxWidth="xl">
             <Toolbar sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -54,7 +56,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                     alt="cool-Collection logo"
                     src="../cool.png"
                 ></Box>
-                <Box sx={{ml:8}}>
+                <Box sx={{ml:2}}>
                     <Typography variant="h6" component={NavLink}
                         to='/home'
                         end
@@ -92,6 +94,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                     </List>
                 </Box>
             </Toolbar>
+            </Container>
         </AppBar>
     )
 }
