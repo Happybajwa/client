@@ -6,18 +6,40 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
-import { Link } from 'react-router-dom';
-import Agent from '../../App/Api/Agent';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
+import { signInUser } from './AccountSlice';
+import { useAppDispatch } from '../../App/Store/ConfigureStore';
+import { history } from '../..';
+import { useMemo } from 'react';
+
+
 
 
 export default function Login() {
 
-  const { register, handleSubmit, formState: { isSubmitting } } = useForm()
+  const dispatch = useAppDispatch();
+  const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const from = useMemo(() => {
+    const state = location.state as { from: Location };
+    if (state && state.from && state.from.pathname) {
+      return state.from?.pathname;
+    }
+    return null;
+  }, [location]);
 
   async function submitForm(data: FieldValues) {
-    await Agent.Account.login(data);
+    try {
+      await dispatch(signInUser(data));
+      navigate(from || '/catalog');
+    }
+    catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -36,7 +58,9 @@ export default function Login() {
           label="Username"
           autoComplete="email"
           autoFocus
-          {...register('username')}
+          {...register('username', { required: 'Username is required' })}
+          error={!!errors.username}
+          helperText={errors?.username?.message?.toString()}
         />
         <TextField
           margin="normal"
@@ -44,10 +68,12 @@ export default function Login() {
           label="Password"
           type="password"
           autoComplete="current-password"
-          {...register('password')}
+          {...register('password', { required: 'Password is required' })}
+          error={!!errors.password}
+          helperText={errors?.password?.message?.toString()}
         />
-        <LoadingButton 
-        
+        <LoadingButton
+
           loading={isSubmitting}
           type="submit"
           fullWidth

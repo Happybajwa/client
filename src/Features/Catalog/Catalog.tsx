@@ -31,12 +31,12 @@ export default function Catalog() {
 
   if (!filtersLoaded) return <LoadingComponent message="Loading Products" />
   return (
-    <Grid container display='flex' justifyContent='space-between' spacing={4} sx={{ mt: 1 }}>
-      <Grid item xs={3} >
-        <Paper sx={{ mb: 2 }}>
+    <Grid container sx={{mt:-2}} display='flex' marginTop={10} justifyContent='space-between' spacing={{ xs: 2, md: 3 }}>
+      <Grid item xs={3}>
+        <Paper sx={{ mb: 2, mt:2}}>
           <ProductSearch></ProductSearch>
         </Paper>
-        <Paper sx={{ mb: 2, p: 2 }}>
+        <Paper sx={{ mb: 2, p: 2}}>
           <RadioButtonGroup
             selectedValue={ProductParams.orderBy}
             options={sortOptions}

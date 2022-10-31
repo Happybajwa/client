@@ -7,7 +7,7 @@ import HomePage from "../../Features/Home/Home";
 import AboutPage from "../../Features/About/About";
 import ContactPage from "../../Features/Contact/Contact";
 import ProductDetails from "../../Features/Catalog/ProductDetails";
-import  'react-toastify/dist/ReactToastify.css'
+import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from "react-toastify";
 import ServerError from "../Errors/ServerError";
 import NotFound from "../Errors/NotFound";
@@ -15,28 +15,31 @@ import BasketPage from "../../Features/Basket/BasketPage";
 import { getCookie } from "../Util/Util";
 import Agent from "../Api/Agent";
 import LoadingComponent from "./LoadingComponent";
-import CheckoutPage from "../../Features/Checkout/CheckoutPage";
 import { useAppDispatch } from "../Store/ConfigureStore";
 import { setBasket } from "../../Features/Basket/BasketSlice";
 import Register from "../../Features/Account/Register";
 import Login from "../../Features/Account/Login";
+import { fetchCurrentUser } from "../../Features/Account/AccountSlice";
+import { PrivateRoute } from "./PrivateRoute";
+import CheckoutPage from "../../Features/Checkout/CheckoutPage";
 
 function App() {
 
   const dispatch = useAppDispatch();
-  const[loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const buyerId = getCookie('buyerId')
-    if(buyerId) {
+    const buyerId = getCookie('buyerId');
+    dispatch(fetchCurrentUser());
+    if (buyerId) {
       Agent.Basket.get()
         .then(basket => dispatch(setBasket(basket)))
         .catch(error => console.log(error))
         .finally(() => setLoading(false));
-    }else {
+    } else {
       setLoading(false)
     }
-  },[dispatch])
+  }, [dispatch])
 
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? 'dark' : 'light';
@@ -54,7 +57,7 @@ function App() {
     setDarkMode(!darkMode)
   }
 
-  if(loading) return <LoadingComponent message="Initializing app..."/>
+  if (loading) return <LoadingComponent message="Initializing app..." />
 
   return (
     <ThemeProvider theme={theme}>
@@ -63,17 +66,19 @@ function App() {
       <Header darkMode={darkMode} handleThemeChange={handleThemeChange}></Header>
       <Container>
         <Routes>
-            <Route path='/Home' element={<HomePage/>} />
-            <Route path='/Catalog' element={<Catalog/>} />
-            <Route path='/Catalog/:id' element={<ProductDetails />} />
-            <Route path='/about' element={<AboutPage />} />
-            <Route path='/contact' element={<ContactPage />} />
-            <Route path='/server-error' element={<ServerError/>} />
-            <Route path='/basket' element={<BasketPage/>} />
-            <Route path='/checkoutPage' element={<CheckoutPage/>} />
-            <Route path='/login' element={<Login/>} />
-            <Route path='/register' element={<Register/>} />
-            <Route path='*' element={<NotFound/>} />
+          <Route path='/Home' element={<HomePage />} />
+          <Route path='/Catalog' element={<Catalog />} />
+          <Route path='/Catalog/:id' element={<ProductDetails />} />
+          <Route path='/about' element={<AboutPage />} />
+          <Route path='/contact' element={<ContactPage />} />
+          <Route path='/server-error' element={<ServerError />} />
+          <Route path='/basket' element={<BasketPage />} />
+          <Route element={<PrivateRoute />}>
+            <Route path='/CheckoutPage' element={<CheckoutPage/>} />
+          </Route>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </Container>
     </ThemeProvider>

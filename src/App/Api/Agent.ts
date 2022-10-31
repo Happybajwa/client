@@ -3,6 +3,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { request } from 'http';
 import { toast } from 'react-toastify';
 import { history } from '../..';
+import { Store } from '../Store/ConfigureStore';
 
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
@@ -12,11 +13,15 @@ axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
+axios.interceptors.request.use(config => {
+    const token = Store.getState().account.user?.token;
+    if(token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+})
+
 axios.interceptors.response.use(async response => {
     await sleep();
-
     const pagination = response.headers['pagination'];
-
     if(pagination) {
         response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
        return response; 
@@ -83,7 +88,7 @@ const Basket = {
 const Account = {
     login:(values:any) => requests.post('account/login',values),
     register:(values:any) => requests.post('account/register',values),
-    current:(values:any) => requests.get('account/currentUser')
+    currentUser:() => requests.get('account/getCurrentUser')
 }
 
 const Agent = {

@@ -1,18 +1,15 @@
 import { Add, Delete, Remove } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import Agent from "../../App/Api/Agent";
 import { useAppDispatch, useAppSelector } from "../../App/Store/ConfigureStore";
 import { addBasketItemAsync, removeBasketItemAsync, setBasket } from "./BasketSlice";
 import BasketSummary from "./BasketSummary";
-
+import { history } from '../..';
 
 export default function BasketPage() {
 
-  const { basket, status } = useAppSelector(state => state.basket);
-  
+  const { basket, status} = useAppSelector(state => state.basket);
   const dispatch = useAppDispatch();
 
   if(!basket) return <Typography variant="h3" textAlign="center" marginTop={3}>Your Basket is Empty</Typography>
@@ -71,10 +68,10 @@ export default function BasketPage() {
         </Table>
       </TableContainer>
       <Grid container>
-        <Grid item xs={6} />
-        <Grid item xs={6}>
+        <Grid item xs={6}/>
+        <Grid item xs={6}>        
           <BasketSummary></BasketSummary>
-          <Button component={Link}
+            <Button component={Link}
             to='/checkoutPage'
             variant="contained"
             size='large'
