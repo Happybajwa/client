@@ -22,6 +22,8 @@ import Login from "../../Features/Account/Login";
 import { fetchCurrentUser } from "../../Features/Account/AccountSlice";
 import { PrivateRoute } from "./PrivateRoute";
 import CheckoutPage from "../../Features/Checkout/CheckoutPage";
+import Orders from "../../Features/Orders/Orders";
+import OrderDetail from "../../Features/Orders/OrderDetail";
 
 function App() {
 
@@ -76,8 +78,12 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route path='/CheckoutPage' element={<CheckoutPage/>} />
           </Route>
+          <Route element={<PrivateRoute />}>
+            <Route path='/Order' element={<Orders/>} />
+          </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/OrderDetail/:id'  element={<OrderDetail />}/>
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Container>

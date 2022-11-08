@@ -1,7 +1,5 @@
-import { ListItem, ListItemAvatar, Avatar, ListItemText, Button, Card, CardActions, CardContent, CardMedia, Typography, Box, Grid, CardHeader } from "@mui/material";
-import { useState } from "react";
+import { Avatar, Button, Card, CardActions, CardContent, CardMedia, Typography, CardHeader } from "@mui/material";
 import { Link } from "react-router-dom";
-import Agent from "../../App/Api/Agent";
 import { Product } from "../../App/Models/Product";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useAppDispatch, useAppSelector } from "../../App/Store/ConfigureStore";
