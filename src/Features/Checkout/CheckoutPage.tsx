@@ -7,7 +7,7 @@ import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import {yupResolver} from '@hookform/resolvers/yup';
 import { validationFunction } from "./CheckoutValidation";
 import Agent from "../../App/Api/Agent";
-import { useAppDispatch } from "../../App/Store/ConfigureStore";
+import { useAppDispatch, useAppSelector } from "../../App/Store/ConfigureStore";
 import { LoadingButton } from "@mui/lab";
 import { clearBasket } from "../Basket/BasketSlice";
 const steps = ['Shipping address', 'Review your order', 'Payment details'];
@@ -25,9 +25,11 @@ function getStepContent(step: number) {
     }
 }
 
+
 export default function CheckoutPage() {
     const [activeStep, setActiveStep] = useState(0);
     const[orderNumber, setOrderNumber] = useState(0);
+    const {basket} = useAppSelector(state => state.basket);
     const[loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
 

@@ -1,7 +1,8 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, Typography, Box, Avatar } from "@mui/material";
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, Typography, Box, Avatar, Grid } from "@mui/material";
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom";
 import Agent from "../../App/Api/Agent"
+import LoadingComponent from "../../App/Layout/LoadingComponent";
 import { Order } from "../../App/Models/Order";
 
 
@@ -18,8 +19,10 @@ export default function OrderDetail() {
             .catch(err => console.log(err))
             .finally(() => setLoading(false))
     }, [id])
+    
     return (
         <>
+        
             <Box display='flex' justifyContent='space-between'>
                 <Typography sx={{ p: 2 }} gutterBottom variant='h4'>#Order {order?.id} - {order?.orderStatus}</Typography>
                 <Button sx={{ m: 2 }} size='large' variant="contained"
