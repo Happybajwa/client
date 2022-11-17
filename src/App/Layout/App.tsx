@@ -1,5 +1,5 @@
 import Catalog from "../../Features/Catalog/Catalog";
-import { Container, createTheme, CssBaseline, Switch, ThemeProvider, Typography } from "@mui/material";
+import { Container, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import Header from "./Header";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -21,9 +21,10 @@ import Register from "../../Features/Account/Register";
 import Login from "../../Features/Account/Login";
 import { fetchCurrentUser } from "../../Features/Account/AccountSlice";
 import { PrivateRoute } from "./PrivateRoute";
-import CheckoutPage from "../../Features/Checkout/CheckoutPage";
 import Orders from "../../Features/Orders/Orders";
 import OrderDetail from "../../Features/Orders/OrderDetail";
+import CheckoutWrapper from "../../Features/Checkout/CheckoutWrapper";
+import Footer from "../../Features/Footer/footer";
 
 function App() {
 
@@ -73,10 +74,11 @@ function App() {
           <Route path='/Catalog/:id' element={<ProductDetails />} />
           <Route path='/about' element={<AboutPage />} />
           <Route path='/contact' element={<ContactPage />} />
+          <Route path='/footer' element={<Footer/>} />
           <Route path='/server-error' element={<ServerError />} />
           <Route path='/basket' element={<BasketPage />} />
           <Route element={<PrivateRoute />}>
-            <Route path='/CheckoutPage' element={<CheckoutPage/>} />
+            <Route path='/CheckoutPage' element={<CheckoutWrapper/>} />
           </Route>
           <Route element={<PrivateRoute />}>
             <Route path='/Order' element={<Orders/>} />
@@ -84,7 +86,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/OrderDetail/:id'  element={<OrderDetail />}/>
-          <Route path='*' element={<NotFound />} />
+          <Route path='*' element={<NotFound />} />  
         </Routes>
       </Container>
     </ThemeProvider>

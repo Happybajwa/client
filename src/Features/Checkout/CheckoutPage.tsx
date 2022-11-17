@@ -4,12 +4,14 @@ import PaymentForm from "./PaymentForm";
 import AddressForm from "./AddressForm";
 import Review from "./Review";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
-import {yupResolver} from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { validationFunction } from "./CheckoutValidation";
 import Agent from "../../App/Api/Agent";
 import { useAppDispatch, useAppSelector } from "../../App/Store/ConfigureStore";
 import { LoadingButton } from "@mui/lab";
 import { clearBasket } from "../Basket/BasketSlice";
+import { CardNumberElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { Link } from "react-router-dom";
 const steps = ['Shipping address', 'Review your order', 'Payment details'];
 
 function getStepContent(step: number) {
@@ -28,43 +30,63 @@ function getStepContent(step: number) {
 
 export default function CheckoutPage() {
     const [activeStep, setActiveStep] = useState(0);
-    const[orderNumber, setOrderNumber] = useState(0);
-    const {basket} = useAppSelector(state => state.basket);
-    const[loading, setLoading] = useState(false);
+    const [orderNumber, setOrderNumber] = useState(0);
+    const { basket } = useAppSelector(state => state.basket);
+    const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
+    const [paymentMessage, setPaymentMessage] = useState('');
+    const [paymentSucceeded, setPaymentSucceeded] = useState(false);
+    const stripe = useStripe();
+    const elements = useElements();
 
     const currentPageValidation = validationFunction[activeStep];
     const methods = useForm({
-        mode:'all',
-        resolver:yupResolver(currentPageValidation)
+        mode: 'all',
+        resolver: yupResolver(currentPageValidation)
     });
 
-    const handleNext = async (data:FieldValues) => {
-        const{nameOnCard, saveAddress, ...shippingAddress} = data;
-        if(activeStep === steps.length - 1)
-        {
-            setLoading(true);
-            try{
-                const orderNumber = await Agent.Orders.create({saveAddress, shippingAddress})
+    async function submitOrder(data: FieldValues) {
+        setLoading(true);
+        const { nameOnCard, saveAddress, ...shippingAddress } = data;
+        if (!stripe || !elements) return;//stripe is not ready
+
+        try {
+            const cardElement = elements.getElement(CardNumberElement);
+            const paymentResult = await stripe.confirmCardPayment(basket?.clientSecret!, {
+                payment_method: {
+                    card: cardElement!,
+                    billing_details: {
+                        name: nameOnCard
+                    }
+                }
+            });
+            if (paymentResult.paymentIntent?.status === 'succeeded') {
+                const orderNumber = await Agent.Orders.create({ saveAddress, shippingAddress })
                 setOrderNumber(orderNumber);
+                setPaymentSucceeded(true);
+                setPaymentMessage('Thank you -  We have received your payment');
                 setActiveStep(activeStep + 1);
                 dispatch(clearBasket());
                 setLoading(false);
-            }
-            catch(err)
-            {
-                console.log(err);
+            } else {
+                setPaymentMessage(paymentResult.error?.message!);
+                setPaymentSucceeded(false);
                 setLoading(false);
+                setActiveStep(activeStep + 1);
             }
-            
-                console.log(data)
+        } catch (err) {
+            console.log(err);
+            setLoading(false);
+        }
+    }
+
+    const handleNext = async (data: FieldValues) => {
+        if (activeStep === steps.length - 1) {
+            await submitOrder(data);
+        }
+        else {
             setActiveStep(activeStep + 1);
         }
-        else
-        {
-            setActiveStep(activeStep + 1);
-        }
-      
     };
 
     const handleBack = () => {
@@ -88,13 +110,24 @@ export default function CheckoutPage() {
                     {activeStep === steps.length ? (
                         <>
                             <Typography variant="h5" gutterBottom>
-                                Thank you for your order.
+                                {paymentMessage}
                             </Typography>
-                            <Typography variant="subtitle1">
-                                Your order number is #{orderNumber}. We have not emailed your order
-                                confirmation, and will not send you an update when your order has
-                                shipped as this is a Student Project!
-                            </Typography>
+                            {paymentSucceeded ? (
+                                <Typography variant="subtitle1">
+                                    Your order number is #{orderNumber}. We have not emailed your order
+                                    confirmation, and will not send you an update when your order has
+                                    shipped as this is a Student Project!
+                                    <br></br>
+                                    To Check Stripe Payments. Click Below
+                                    <br></br>
+                                    <a href={'https://dashboard.stripe.com/test/payments'} target={'_blank'}>Click here</a>
+                                </Typography>
+                                
+                            ):(
+                                <Button variant="contained" onClick={handleBack}>
+                                    Go Back and Try Again
+                                </Button>
+                            )}
                         </>
                     ) : (
                         <form onSubmit={methods.handleSubmit(handleNext)}>

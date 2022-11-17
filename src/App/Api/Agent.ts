@@ -96,12 +96,17 @@ const Orders = {
     create:(values:any) => requests.post('orders', values)
 }
 
+const Payment ={
+    createPaymentIntent:()=>requests.post('payment',{})
+}
+
 const Agent = {
     Catalog,
     TestErrors,
     Basket,
     Account,
-    Orders
+    Orders,
+    Payment
 }
 
 export default Agent;
