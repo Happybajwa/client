@@ -14,8 +14,7 @@ interface Props {
 }
 const midLinks = [
     { title: 'catalog', path: '/catalog' },
-    { title: 'about', path: '/about' },
-    { title: 'contact', path: '/contact' }
+    { title: 'about', path: '/about' }
 ]
 const rightLinks = [
     { title: 'register', path: '/register' },
@@ -49,15 +48,16 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                 }}>
+                    <Link to='/home' style={{marginRight:'-250px'}}>
                     <Box
                         component="img"
                         sx={{
-                            height: 70,
-                            marginRight: -23
+                            height: 70,           
                         }}
                         alt="cool-Collection logo"
                         src="../cool.png"
                     ></Box>
+                    </Link>
                     <Box sx={{ ml: 2 }}>
                         <Typography variant="h6" component={NavLink}
                             to='/home'

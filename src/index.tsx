@@ -6,6 +6,8 @@ import { createBrowserHistory } from "history";
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Store } from './App/Store/ConfigureStore';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 export const history = createBrowserHistory();
 

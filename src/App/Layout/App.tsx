@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "../../Features/Home/Home";
 import AboutPage from "../../Features/About/About";
-import ContactPage from "../../Features/Contact/Contact";
 import ProductDetails from "../../Features/Catalog/ProductDetails";
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from "react-toastify";
@@ -25,6 +24,7 @@ import Orders from "../../Features/Orders/Orders";
 import OrderDetail from "../../Features/Orders/OrderDetail";
 import CheckoutWrapper from "../../Features/Checkout/CheckoutWrapper";
 import Inventory from "../../Features/Admin/Inventory";
+import MyProfile from "../../Features/profile/myProfile";
 
 function App() {
 
@@ -34,6 +34,7 @@ function App() {
   useEffect(() => {
     const buyerId = getCookie('buyerId');
     dispatch(fetchCurrentUser());
+    //alert("This is a Student Project")
     if (buyerId) {
       Agent.Basket.get()
         .then(basket => dispatch(setBasket(basket)))
@@ -72,7 +73,6 @@ function App() {
           <Route path='/Catalog' element={<Catalog />} />
           <Route path='/Catalog/:id' element={<ProductDetails />} />
           <Route path='/about' element={<AboutPage />} />
-          <Route path='/contact' element={<ContactPage />} />
           <Route path='/server-error' element={<ServerError />} />
           <Route path='/basket' element={<BasketPage />} />
           <Route element={<PrivateRoute />}>
@@ -83,6 +83,9 @@ function App() {
           </Route>
           <Route element={<PrivateRoute roles={['Admin']} />}>
             <Route path='/Inventory' element={<Inventory/>} />
+          </Route>
+          <Route element={<PrivateRoute />}>
+            <Route path='/MyProfile' element={<MyProfile/>} />
           </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
