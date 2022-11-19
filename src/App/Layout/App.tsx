@@ -24,7 +24,7 @@ import { PrivateRoute } from "./PrivateRoute";
 import Orders from "../../Features/Orders/Orders";
 import OrderDetail from "../../Features/Orders/OrderDetail";
 import CheckoutWrapper from "../../Features/Checkout/CheckoutWrapper";
-import Footer from "../../Features/Footer/footer";
+import Inventory from "../../Features/Admin/Inventory";
 
 function App() {
 
@@ -55,7 +55,6 @@ function App() {
       }
     }
   })
-
   function handleThemeChange() {
     setDarkMode(!darkMode)
   }
@@ -74,7 +73,6 @@ function App() {
           <Route path='/Catalog/:id' element={<ProductDetails />} />
           <Route path='/about' element={<AboutPage />} />
           <Route path='/contact' element={<ContactPage />} />
-          <Route path='/footer' element={<Footer/>} />
           <Route path='/server-error' element={<ServerError />} />
           <Route path='/basket' element={<BasketPage />} />
           <Route element={<PrivateRoute />}>
@@ -82,6 +80,9 @@ function App() {
           </Route>
           <Route element={<PrivateRoute />}>
             <Route path='/Order' element={<Orders/>} />
+          </Route>
+          <Route element={<PrivateRoute roles={['Admin']} />}>
+            <Route path='/Inventory' element={<Inventory/>} />
           </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
